@@ -10,6 +10,8 @@
             <div class="collapse navbar-collapse" id="nav-bar">
                 <ul class="navbar-nav ms-auto align-items-sm-center">
                     @auth
+                        <li class="nav-item"><a href="{{ route('movies.create') }}" class="nav-link">動画を登録する</a></li>
+                        <li class="nav-item"><a href="{{ route('users.show', Auth::user()) }}" class="nav-link">マイページ</a></li>
                         <li class="nav-item">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
