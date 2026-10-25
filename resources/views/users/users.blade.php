@@ -5,6 +5,9 @@
         <div class="col">
             <div class="card h-100">
                 <div class="card-body">
+                    <div class="text-end">
+                        <span class="badge rounded-pill text-bg-success">{{ $user->received_favorites_count }} いいね！</span>
+                    </div>
                     <a href="{{ route('users.show', $user) }}">＠{{ $user->name }}</a>
 
                     @if ($user->latestMovie)

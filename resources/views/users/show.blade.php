@@ -9,6 +9,11 @@
                 動画 <span class="badge text-bg-secondary">{{ $user->movies_count }}</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="{{ route('users.favorites', $user) }}" class="nav-link {{ request()->routeIs('users.favorites') ? 'active' : '' }}">
+                お気に入り <span class="badge text-bg-secondary">{{ $user->favorites_count }}</span>
+            </a>
+        </li>
     </ul>
 
     @include('movies.movies', ['movies' => $movies])
