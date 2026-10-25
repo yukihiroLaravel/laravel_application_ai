@@ -23,6 +23,12 @@
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
+        <div class="form-check mb-3">
+            {{-- チェックを外したときも「0」が送られるようにする --}}
+            <input type="hidden" name="favorite_flag" value="0">
+            <input id="favorite_flag" type="checkbox" class="form-check-input" name="favorite_flag" value="1" @checked(old('favorite_flag', true))>
+            <label for="favorite_flag" class="form-check-label">いいね！を許可する</label>
+        </div>
         <button type="submit" class="btn btn-primary">登録する</button>
     </form>
 

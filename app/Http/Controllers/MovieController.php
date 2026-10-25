@@ -11,7 +11,7 @@ class MovieController extends Controller
     // 動画登録画面
     public function create(Request $request)
     {
-        $movies = $request->user()->movies()->latest()->paginate(9);
+        $movies = $request->user()->movies()->withCount('favoriteUsers')->latest()->paginate(9);
 
         return view('movies.create', [
             'movies' => $movies,
@@ -21,7 +21,38 @@ class MovieController extends Controller
     // 動画を登録する
     public function store(MovieRequest $request)
     {
-        $request->user()->movies()->create($request->validated());
+        $request->user()->movies()->create([
+            'youtube_id' => $request->youtube_id,
+            'title' => $request->title,
+            'favorite_flag' => $request->boolean('favorite_flag'),
+        ]);
+
+        return back();
+    }
+
+    // 動画編集画面
+    public function edit(Request $request, Movie $movie)
+    {
+        abort_if($movie->user_id !== $request->user()->id, 403);
+
+        $movies = $request->user()->movies()->withCount('favoriteUsers')->latest()->paginate(9);
+
+        return view('movies.edit', [
+            'movie' => $movie,
+            'movies' => $movies,
+        ]);
+    }
+
+    // 動画を更新する
+    public function update(MovieRequest $request, Movie $movie)
+    {
+        abort_if($movie->user_id !== $request->user()->id, 403);
+
+        $movie->update([
+            'youtube_id' => $request->youtube_id,
+            'title' => $request->title,
+            'favorite_flag' => $request->boolean('favorite_flag'),
+        ]);
 
         return back();
     }

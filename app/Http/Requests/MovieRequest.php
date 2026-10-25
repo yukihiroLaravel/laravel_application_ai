@@ -22,6 +22,7 @@ class MovieRequest extends FormRequest
         return [
             'youtube_id' => ['required', 'string', 'max:11'],
             'title' => ['nullable', 'string', 'max:36'],
+            'favorite_flag' => ['nullable', 'boolean'],
         ];
     }
 
@@ -30,6 +31,7 @@ class MovieRequest extends FormRequest
         return [
             'youtube_id' => 'YouTube動画ID',
             'title' => '動画タイトル',
+            'favorite_flag' => 'いいねの許可',
         ];
     }
 }
