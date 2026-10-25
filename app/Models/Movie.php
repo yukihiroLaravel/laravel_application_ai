@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\YouTubeService;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,5 +31,13 @@ class Movie extends Model
     public function favoriteUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'favorites')->withTimestamps();
+    }
+
+    // 表示用のタイトル：入力されたタイトルがなければ、YouTubeから取得したタイトルを使う
+    public function displayTitle(): string
+    {
+        return $this->title
+            ?? app(YouTubeService::class)->getTitle($this->youtube_id)
+            ?? '※タイトルを取得できませんでした';
     }
 }

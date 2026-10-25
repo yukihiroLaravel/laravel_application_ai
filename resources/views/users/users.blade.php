@@ -14,7 +14,7 @@
                         <div class="ratio ratio-16x9 mt-2">
                             <iframe src="https://www.youtube.com/embed/{{ $user->latestMovie->youtube_id }}" allowfullscreen></iframe>
                         </div>
-                        <p class="mt-2 mb-0">{{ $user->latestMovie->title }}</p>
+                        <p class="mt-2 mb-0">{{ $user->latestMovie->displayTitle() }}</p>
                     @else
                         <p class="text-muted mt-2 mb-0">動画はまだ登録されていません</p>
                     @endif
