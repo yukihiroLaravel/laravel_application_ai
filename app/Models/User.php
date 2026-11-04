@@ -7,9 +7,11 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany; // 追記
-use Illuminate\Database\Eloquent\Relations\HasOne; // 追記
-use Illuminate\Database\Eloquent\SoftDeletes; // 追記
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough; // 追記
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -18,7 +20,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes; // SoftDeletes を追記
+    use HasFactory, Notifiable, SoftDeletes;
 
     /**
      * Get the attributes that should be cast.
@@ -33,7 +35,6 @@ class User extends Authenticatable
         ];
     }
 
-    // 追記ここから
     // このユーザーが登録した動画（1人のユーザーは複数の動画を持つ）
     public function movies(): HasMany
     {
@@ -45,5 +46,38 @@ class User extends Authenticatable
     {
         return $this->hasOne(Movie::class)->latestOfMany();
     }
-    // 追記ここまで
+
+    // このユーザーがいいねした動画（多対多）
+    public function favorites(): BelongsToMany
+    {
+        return $this->belongsToMany(Movie::class, 'favorites')->withTimestamps();
+    }
+
+    // このユーザーの動画が受け取ったいいね（合計いいね数を数える用）  ← 追記
+    public function receivedFavorites(): HasManyThrough
+    {
+        return $this->hasManyThrough(Favorite::class, Movie::class);
+    }
+
+    // その動画にいいねしているか
+    public function isFavorite(Movie $movie): bool
+    {
+        return $this->favorites()->where('movie_id', $movie->id)->exists();
+    }
+
+    // いいねする（まだいいねしていなければ）
+    public function favorite(Movie $movie): void
+    {
+        if (! $this->isFavorite($movie)) {
+            $this->favorites()->attach($movie->id);
+        }
+    }
+
+    // いいねを外す（いいねしていれば）
+    public function unfavorite(Movie $movie): void
+    {
+        if ($this->isFavorite($movie)) {
+            $this->favorites()->detach($movie->id);
+        }
+    }
 }
