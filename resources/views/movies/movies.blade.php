@@ -9,7 +9,7 @@
                     <div class="ratio ratio-16x9">
                         <iframe src="https://www.youtube.com/embed/{{ $movie->youtube_id }}" allowfullscreen></iframe>
                     </div>
-                    <p class="mt-2">{{ $movie->title }}</p>
+                    <p class="mt-2">{{ $movie->displayTitle() }}</p> {{-- 変更 --}}
 
                     @include('favorite.favorite_button', ['movie' => $movie])
 

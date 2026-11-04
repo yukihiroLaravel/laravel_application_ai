@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    // 追記
+    'youtube' => [
+        'key' => env('YOUTUBE_API_KEY'),
+    ],
+
 ];
