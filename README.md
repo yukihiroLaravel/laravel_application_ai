@@ -32,7 +32,7 @@ docker compose stop                             # 停止
 
 ## ポート番号がぶつかるとき
 
-`port is already allocated` と出たら、ほかのアプリ（MAMPや別のDocker環境）が同じポートを使っています。そのアプリを止めるか、ポート番号を変えて起動します。
+`port is already allocated` と出たら、ほかのアプリ（以前の講座の環境や、別のDocker環境など）が同じポートを使っています。そのアプリを止めるか、ポート番号を変えて起動します。
 
 ```
 APP_PORT=18080 ADMINER_PORT=18088 docker compose up -d
